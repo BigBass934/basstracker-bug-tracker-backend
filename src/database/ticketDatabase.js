@@ -47,7 +47,7 @@ async function getAllTicket() {
     
 }
 
-async function postNewTicket(ticketId, projectName, ticketTag, ticketDescription, ticketName, time_Stamp, projectId, ticketSlug) {
+async function postNewTicket(ticketId, projectName, ticketTag, ticketDescription, ticketName, time_Stamp, projectId, ticketSlug, _cellVariants) {
     try{
         let ticket = {
             ticketId: {N: ticketId.toString()},
@@ -57,7 +57,8 @@ async function postNewTicket(ticketId, projectName, ticketTag, ticketDescription
             ticketName: {S: ticketName},
             time_Stamp: {S: time_Stamp},
             projectId: {N: projectId.toString()},
-            ticketSlug: {S: ticketSlug}
+            ticketSlug: {S: ticketSlug},
+            _cellVariants: {M: {ticketTag: {S: _cellVariants}}}
           }
         let result = await dbClient.send(new PutItemCommand({TableName: TABLE_NAME, Item: ticket}));
         
@@ -68,7 +69,7 @@ async function postNewTicket(ticketId, projectName, ticketTag, ticketDescription
     
 }
 
-async function updateTicket(ticketId, projectName, ticketTag, ticketDescription, ticketName, time_Stamp, projectId, ticketSlug) {
+async function updateTicket(ticketId, projectName, ticketTag, ticketDescription, ticketName, time_Stamp, projectId, ticketSlug, _cellVariants) {
     try{
         let ticket = {
             ':projectName': {S: projectName},
@@ -77,12 +78,14 @@ async function updateTicket(ticketId, projectName, ticketTag, ticketDescription,
             ':ticketName': {S: ticketName},
             ':time_Stamp': {S: time_Stamp},
             ':projectId': {N: projectId.toString()},
-            ':ticketSlug': {S: ticketSlug}
+            ':ticketSlug': {S: ticketSlug},
+            ':_cellVariants': {M: {ticketTag: {S: _cellVariants}}}
           }
           //console.log(ticketId);
           //console.log(Tag);
-        let updateExpression =  'SET projectName = :projectName, ticketTag = :ticketTag, ticketDescription = :ticketDescription, ticketName = :ticketName, time_Stamp = :time_Stamp, projectId = :projectId, ticketSlug = :ticketSlug';
-        let result = await dbClient.send(new UpdateItemCommand({TableName: TABLE_NAME, Key: { ticketId: { N: ticketId.toString() } }, ExpressionAttributeValues: ticket, UpdateExpression: updateExpression}));
+        let attributeNames = {'#fn':'_cellVariants'};
+        let updateExpression =  'SET projectName = :projectName, ticketTag = :ticketTag, ticketDescription = :ticketDescription, ticketName = :ticketName, time_Stamp = :time_Stamp, projectId = :projectId, ticketSlug = :ticketSlug, #fn = :_cellVariants';
+        let result = await dbClient.send(new UpdateItemCommand({TableName: TABLE_NAME, Key: { ticketId: { N: ticketId.toString() } }, ExpressionAttributeNames: attributeNames, ExpressionAttributeValues: ticket, UpdateExpression: updateExpression}));
         
         return result;
     } catch(error) {

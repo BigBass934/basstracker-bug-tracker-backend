@@ -14,12 +14,12 @@ router.get('/', async (req, res) => {
     res.json(ticket);
 });
 router.post('/', async (req, res) => {
-    let ticket = await ticketDB.postNewTicket(req.body.ticketId, req.body.projectName, req.body.ticketTag, req.body.ticketDescription, req.body.ticketName, req.body.time_Stamp, req.body.projectId, req.body.ticketSlug);
+    let ticket = await ticketDB.postNewTicket(req.body.ticketId, req.body.projectName, req.body.ticketTag, req.body.ticketDescription, req.body.ticketName, req.body.time_Stamp, req.body.projectId, req.body.ticketSlug, req.body._cellVariants);
     res.json(ticket);
 });
 router.put('/:id', async(req, res) => {
     console.log("got here")
-    let ticket = await ticketDB.updateTicket(req.params.id, req.body.projectName, req.body.ticketTag, req.body.ticketDescription, req.body.ticketName, req.body.time_Stamp, req.body.projectId, req.body.ticketSlug);
+    let ticket = await ticketDB.updateTicket(req.params.id, req.body.projectName, req.body.ticketTag, req.body.ticketDescription, req.body.ticketName, req.body.time_Stamp, req.body.projectId, req.body.ticketSlug, req.body._cellVariants);
     res.json(ticket);
 })
 
