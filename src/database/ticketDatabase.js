@@ -47,17 +47,17 @@ async function getAllTicket() {
     
 }
 
-async function postNewTicket(ticketId, Project, Tag, TicketDescription, TicketName, Timestamp, projectId, slug) {
+async function postNewTicket(ticketId, projectName, ticketTag, ticketDescription, ticketName, time_Stamp, projectId, ticketSlug) {
     try{
         let ticket = {
             ticketId: {N: ticketId.toString()},
-            Project: {S: Project},
-            Tag: {S: Tag},
-            TicketDescription: {S: TicketDescription},
-            TicketName: {S: TicketName},
-            Timestamp: {S: Timestamp},
+            projectName: {S: projectName},
+            ticketTag: {S: ticketTag},
+            ticketDescription: {S: ticketDescription},
+            ticketName: {S: ticketName},
+            time_Stamp: {S: time_Stamp},
             projectId: {N: projectId.toString()},
-            slug: {S: slug}
+            ticketSlug: {S: ticketSlug}
           }
         let result = await dbClient.send(new PutItemCommand({TableName: TABLE_NAME, Item: ticket}));
         
@@ -68,21 +68,23 @@ async function postNewTicket(ticketId, Project, Tag, TicketDescription, TicketNa
     
 }
 
-async function updateTicket(ticketId, Project, Tag, TicketDescription, TicketName, Timestamp, projectId, slug) {
+async function updateTicket(ticketId, projectName, ticketTag, ticketDescription, ticketName, time_Stamp, projectId, ticketSlug) {
     try{
         let ticket = {
-            ticketId: {N: ticketId.toString()},
-            Project: {S: Project},
-            Tag: {S: Tag},
-            TicketDescription: {S: TicketDescription},
-            TicketName: {S: TicketName},
-            Timestamp: {S: Timestamp},
-            projectId: {N: projectId.toString()},
-            slug: {S: slug}
+            ':projectName': {S: projectName},
+            ':ticketTag': {S: ticketTag},
+            ':ticketDescription': {S: ticketDescription},
+            ':ticketName': {S: ticketName},
+            ':time_Stamp': {S: time_Stamp},
+            ':projectId': {N: projectId.toString()},
+            ':ticketSlug': {S: ticketSlug}
           }
-        let result = await dbClient.send(new UpdateItemCommand({TableName: TABLE_NAME, Key: { ticketId: { N: ticketId } }, Item: ticket}));
+          //console.log(ticketId);
+          //console.log(Tag);
+        let updateExpression =  'SET projectName = :projectName, ticketTag = :ticketTag, ticketDescription = :ticketDescription, ticketName = :ticketName, time_Stamp = :time_Stamp, projectId = :projectId, ticketSlug = :ticketSlug';
+        let result = await dbClient.send(new UpdateItemCommand({TableName: TABLE_NAME, Key: { ticketId: { N: ticketId.toString() } }, ExpressionAttributeValues: ticket, UpdateExpression: updateExpression}));
         
-        return project.projectId;
+        return result;
     } catch(error) {
         console.error(error);
     }
