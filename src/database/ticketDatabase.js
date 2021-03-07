@@ -1,7 +1,7 @@
-// const aws = require("aws-sdk");
-// aws.config.update({secretAccessKey: process.env.aws_secret_access_key,
-//     accessKeyId: process.env.aws_access_key_id,
-//     region: "us-east-2"})
+const aws = require("aws-sdk");
+aws.config.update({secretAccessKey: process.env.aws_secret_access_key,
+    accessKeyId: process.env.aws_access_key_id,
+    region: "us-east-2"})
 const {
     DynamoDBClient,
     GetItemCommand,
@@ -36,6 +36,7 @@ async function getTicket(ticketId) {
 
 async function getAllTicket() {
     try{
+        console.log("about to send now!")
         let result = await dbClient.send(new ScanCommand({TableName: TABLE_NAME}));
         let response = [];
         result.Items.forEach(function(element, index, array){
@@ -44,6 +45,7 @@ async function getAllTicket() {
         console.log(response);
         return response;
     } catch(error) {
+        console.log("Here is the error:")
         console.error(error);
     }
     
