@@ -1,5 +1,7 @@
 const aws = require("aws-sdk");
-
+aws.config.update({secretAccessKey: process.env.aws_secret_access_key,
+    accessKeyId: process.env.aws_access_key_id,
+    region: "us-east-2"})
 const {
     DynamoDBClient,
     GetItemCommand,
