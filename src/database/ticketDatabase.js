@@ -1,7 +1,7 @@
 const aws = require("aws-sdk");
-aws.config.update({secretAccessKey: process.env.aws_secret_access_key,
-    accessKeyId: process.env.aws_access_key_id,
-    region: "us-east-2"})
+// aws.config.update({secretAccessKey: process.env.aws_secret_access_key,
+//     accessKeyId: process.env.aws_access_key_id,
+//     region: "us-east-2"})
 const {
     DynamoDBClient,
     GetItemCommand,
@@ -18,7 +18,8 @@ const {
 //   }
 // })
 
-const dbClient =  new DynamoDBClient({region:"us-east-2"});
+const dbClient =  new DynamoDBClient({credentials: {secretAccessKey: process.env.aws_secret_access_key,
+    accessKeyId: process.env.aws_access_key_id,}, region:"us-east-2"});
 const TABLE_NAME = "Ticket"
 
 
