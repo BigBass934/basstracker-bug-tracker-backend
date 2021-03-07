@@ -1,7 +1,7 @@
 const aws = require("aws-sdk");
-// aws.config.update({secretAccessKey: process.env.aws_secret_access_key,
-//     accessKeyId: process.env.aws_access_key_id,
-//     region: "us-east-2"})
+
+const { unmarshall } = require('@aws-sdk/util-dynamodb');
+
 const {
     DynamoDBClient,
     GetItemCommand,
@@ -9,14 +9,6 @@ const {
     PutItemCommand,
     UpdateItemCommand,
 } = require('@aws-sdk/client-dynamodb');
-
-// aws.config.getCredentials(function(err) {
-//     if (err) console.log(err.message);
-//     // credentials not loaded
-//     else {
-//       console.log("Access key:", aws.config.credentials.accessKeyId);
-//   }
-// })
 
 const dbClient =  new DynamoDBClient({credentials: {secretAccessKey: process.env.aws_secret_access_key,
     accessKeyId: process.env.aws_access_key_id,}, region:"us-east-2"});
@@ -41,7 +33,7 @@ async function getAllTicket() {
         let result = await dbClient.send(new ScanCommand({TableName: TABLE_NAME}));
         let response = [];
         result.Items.forEach(function(element, index, array){
-            response.push(aws.DynamoDB.Converter.unmarshall(element));
+            response.push(unmarshall(element));
         })
         console.log(response);
         return response;
