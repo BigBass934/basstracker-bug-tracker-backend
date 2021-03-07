@@ -8,13 +8,13 @@ const {
     UpdateItemCommand,
 } = require('@aws-sdk/client-dynamodb');
 
-aws.config.getCredentials(function(err) {
-    if (err) console.log(err.message);
-    // credentials not loaded
-    else {
-      console.log("Access key:", aws.config.credentials.accessKeyId);
-  }
-})
+// aws.config.getCredentials(function(err) {
+//     if (err) console.log(err.message);
+//     // credentials not loaded
+//     else {
+//       console.log("Access key:", aws.config.credentials.accessKeyId);
+//   }
+// })
 
 const dbClient =  new DynamoDBClient({region:"us-east-2"});
 const TABLE_NAME = "Ticket"
